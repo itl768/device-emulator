@@ -19,7 +19,7 @@
 const unsigned long SECOND = 1000;
 const unsigned long HOUR = 3600 * SECOND;
 
-const int delayHours = 2; //delay between datapush in hours
+const int delayHours = 1; //delay between datapush in hours
 char *deviceIds[] = {"a82e7138-4923-4ad3-b74e-5be0ccb878ea"}; // array of device ids
 int numOfDevices = 0; //number of devices defined in the array
 
@@ -111,10 +111,10 @@ void loop() {
 
    int level=readDistance();
    sensorValue = analogRead(analogInPin);
-   int percentage=(sensorValue/1024)*100;
+   float voltage=sensorValue*(6.6 / 1023.0);
+   float percentage = (voltage-4)*47.61;
    
-   int batteryPercentage=(sensorValue);
- Serial.println(level);
+ Serial.println(percentage);
     String httpRequestData = "{\"Level\":\"" + String(level) + "\",\"Voltage\":\"" + String(percentage) + "\"}";
     Serial.print("[HTTP] POST...\n");
     int httpCode = http.POST(httpRequestData);
